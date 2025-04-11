@@ -39,6 +39,36 @@ android {
     }
 }
 
+android {
+    namespace = "com.example.refine_app"
+    ndkVersion = "27.0.12077973"
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11.toString()
+    }
+
+    defaultConfig {
+        applicationId = "com.example.refine_app"
+        minSdk = 21 // Set this to your desired minimum SDK version
+        targetSdk = 33 // Set this to your desired target SDK version (33 here)
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+    }
+
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.getByName("debug")
+        }
+    }
+    
+}
+
 flutter {
     source = "../.."
 }
+

@@ -1,16 +1,3 @@
-# refine_app
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Read This Ya Fayrouz
+Backend: Node.js
+Frontend: The ip in this line     final url = Uri.parse('http://192.168.1.58:5000/api/users'); is the ip thats hosted replace the ip with the ip of the device that ran the backend (node server.js) then thhe api for the registeration should work.

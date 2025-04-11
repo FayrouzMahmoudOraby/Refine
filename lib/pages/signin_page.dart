@@ -1,121 +1,148 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import '../widgets/custom_button.dart';
 import '../widgets/custom_form.dart';
 import '../pages/video_upload_page.dart';
 
-class SignInPage extends StatelessWidget {
+class SignInPage extends StatefulWidget {
+  @override
+  _SignInPageState createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  String errorMessage = '';
+
+  Future<void> _loginUser() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      setState(() => errorMessage = 'Please fill in all fields');
+      return;
+    }
+
+    final url = Uri.parse('http://localhost:5000/api/login'); // Update this URL
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'password': password}),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && data['success'] == true) {
+        // Navigate to video upload on successful login
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => VideoUploadPage()),
+        );
+      } else {
+        setState(() => errorMessage = data['message'] ?? 'Login failed');
+      }
+    } catch (e) {
+      setState(() => errorMessage = 'Something went wrong. Please try again.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF005BBB), // Blue background
+      backgroundColor: Color(0xFF005BBB),
       body: Stack(
         children: [
-          // Half Circles (if needed)
           Positioned(top: -90, left: -30, child: halfCircle2()),
           Positioned(top: -60, right: -30, child: halfCircle()),
-
-          // Centered Content
           Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Title
-                Text(
-                  "Sign In",
-                  style: TextStyle(
-                    fontSize: 50,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    letterSpacing: 2,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Sign In",
+                    style: TextStyle(
+                      fontSize: 50,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      letterSpacing: 2,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 30),
+                  const SizedBox(height: 30),
 
-                // Form Fields
-                CustomFormField(label: "E-mail"),
-                CustomFormField(label: "Password", isPassword: true),
+                  // Form Inputs
+                  CustomFormField(label: "E-mail", controller: _emailController),
+                  CustomFormField(label: "Password", isPassword: true, controller: _passwordController),
 
-                const SizedBox(height: 20),
+                  const SizedBox(height: 10),
 
-                // Submit Button (aligned to the right)
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: CustomButton(
-                    text: "Submit",
+                  if (errorMessage.isNotEmpty)
+                    Text(
+                      errorMessage,
+                      style: TextStyle(color: Colors.redAccent),
+                    ),
+
+                  const SizedBox(height: 10),
+
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: CustomButton(
+                      text: "Submit",
+                      onPressed: _loginUser,
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+                  CustomButton(
+                    text: '',
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => VideoUploadPage(),
-                        ),
-                      );
+                      // TODO: Google Sign In
                     },
+                    bgColor: Colors.white,
+                    textColor: Colors.black,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset('assets/google.png', height: 24),
+                        SizedBox(width: 10),
+                        Text('Continue with Google',
+                            style: TextStyle(color: Colors.black, fontSize: 16)),
+                      ],
+                    ),
                   ),
-                ),
 
-                const SizedBox(height: 20), // Space between buttons
-                // Google Sign-In Button
-                CustomButton(
-                  text: '',
-                  onPressed: () {
-                    // Handle Google sign-in logic
-                  },
-                  bgColor: Colors.white,
-                  textColor: Colors.black,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        'assets/google.png',
-                        height: 24,
-                      ), // Google logo
-                      SizedBox(width: 10),
-                      Text(
-                        'Continue with Google',
-                        style: TextStyle(color: Colors.black, fontSize: 16),
-                      ),
-                    ],
+                  const SizedBox(height: 10),
+                  CustomButton(
+                    text: '',
+                    onPressed: () {
+                      // TODO: Apple Sign In
+                    },
+                    bgColor: Colors.black,
+                    textColor: Colors.white,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset('assets/apple-logo.png', height: 24, color: Colors.white),
+                        SizedBox(width: 10),
+                        Text('Continue with Apple',
+                            style: TextStyle(color: Colors.white, fontSize: 16)),
+                      ],
+                    ),
                   ),
-                ),
-
-                const SizedBox(height: 10), // Space between buttons
-                // Apple Sign-In Button
-                CustomButton(
-                  text: '',
-                  onPressed: () {
-                    // Handle Apple sign-in logic
-                  },
-                  bgColor: Colors.black,
-                  textColor: Colors.white,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        'assets/apple-logo.png',
-                        height: 24,
-                        color: Colors.white,
-                      ), // Apple logo
-                      SizedBox(width: 10),
-                      Text(
-                        'Continue with Apple',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-
-          // Go Back Button
           Positioned(
             top: 40,
             right: 20,
             child: CustomButton(
               text: "Go Back",
-              onPressed:
-                  () =>
-                      Navigator.pop(context), // Go back to the previous screen
+              onPressed: () => Navigator.pop(context),
               bgColor: Colors.white,
               textColor: Colors.black,
             ),
@@ -125,7 +152,6 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  // Function for Half Circle (optional)
   Widget halfCircle() {
     return Container(
       width: 260,
