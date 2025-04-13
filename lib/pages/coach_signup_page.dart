@@ -20,8 +20,13 @@ class _CoachSignUpPageState extends State<CoachSignUpPage> {
   final TextEditingController phoneController = TextEditingController();
 
   Future<void> submitForm() async {
-    if (nameController.text.isEmpty || emailController.text.isEmpty || passwordController.text.isEmpty || phoneController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please fill all required fields')));
+    if (nameController.text.isEmpty ||
+        emailController.text.isEmpty ||
+        passwordController.text.isEmpty ||
+        phoneController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please fill all required fields')),
+      );
       return;
     }
 
@@ -30,7 +35,7 @@ class _CoachSignUpPageState extends State<CoachSignUpPage> {
     print('Email: ${emailController.text}');
     print('Password: ${passwordController.text}');
     print('Phone: ${phoneController.text}');
-  
+
     final url = Uri.parse('http://192.168.1.58:5000/api/users');
     final response = await http.post(
       url,
@@ -53,9 +58,9 @@ class _CoachSignUpPageState extends State<CoachSignUpPage> {
       );
     } else {
       print('Error: ${response.body}');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Registration failed!')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Registration failed!')));
     }
   }
 
@@ -85,18 +90,22 @@ class _CoachSignUpPageState extends State<CoachSignUpPage> {
 
                   // Form Fields
                   CustomFormField(label: "name", controller: nameController),
-                  CustomFormField(label: "last name", controller: lastNameController),
+                  CustomFormField(
+                    label: "last name",
+                    controller: lastNameController,
+                  ),
                   CustomFormField(label: "e-mail", controller: emailController),
-                  CustomFormField(label: "password", isPassword: true, controller: passwordController),
+                  CustomFormField(
+                    label: "password",
+                    isPassword: true,
+                    controller: passwordController,
+                  ),
                   CustomFormField(label: "phone", controller: phoneController),
 
                   const SizedBox(height: 20),
 
                   // Submit
-                  CustomButton(
-                    text: "Submit",
-                    onPressed: submitForm,
-                  ),
+                  CustomButton(text: "Submit", onPressed: submitForm),
 
                   const SizedBox(height: 10),
 
@@ -104,15 +113,26 @@ class _CoachSignUpPageState extends State<CoachSignUpPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Already have an account?", style: TextStyle(color: Colors.white)),
+                      Text(
+                        "Already have an account?",
+                        style: TextStyle(color: Colors.white),
+                      ),
                       TextButton(
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => SignInPage()),
+                            MaterialPageRoute(
+                              builder: (context) => SignInPage(),
+                            ),
                           );
                         },
-                        child: Text("Sign In", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                        child: Text(
+                          "Sign In",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -132,7 +152,10 @@ class _CoachSignUpPageState extends State<CoachSignUpPage> {
                       children: [
                         Image.asset('assets/google.png', height: 24),
                         SizedBox(width: 10),
-                        Text('Continue with Google', style: TextStyle(color: Colors.black, fontSize: 16)),
+                        Text(
+                          'Continue with Google',
+                          style: TextStyle(color: Colors.black, fontSize: 16),
+                        ),
                       ],
                     ),
                   ),
@@ -150,9 +173,16 @@ class _CoachSignUpPageState extends State<CoachSignUpPage> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Image.asset('assets/apple-logo.png', height: 24, color: Colors.white),
+                        Image.asset(
+                          'assets/apple-logo.png',
+                          height: 24,
+                          color: Colors.white,
+                        ),
                         SizedBox(width: 10),
-                        Text('Continue with Apple', style: TextStyle(color: Colors.white, fontSize: 16)),
+                        Text(
+                          'Continue with Apple',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
                       ],
                     ),
                   ),
@@ -219,7 +249,11 @@ class CustomFormField extends StatelessWidget {
   final TextEditingController controller;
   final bool isPassword;
 
-  CustomFormField({required this.label, required this.controller, this.isPassword = false});
+  CustomFormField({
+    required this.label,
+    required this.controller,
+    this.isPassword = false,
+  });
 
   @override
   Widget build(BuildContext context) {
