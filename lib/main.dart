@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pages/selection_page.dart'; // Import the Selection Page
+import 'pages/subscription_system.dart';
 
 void main() {
   runApp(const MyApp());
@@ -74,6 +75,36 @@ class HomePage extends StatelessWidget {
                     elevation: 5,
                   ),
                   child: const Text("Welcome"),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SubscriptionPage(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 15,
+                      ),
+                      textStyle: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      elevation: 5,
+                    ),
+                    child: const Text("Check Pricing"),
+                  ),
                 ),
               ],
             ),
