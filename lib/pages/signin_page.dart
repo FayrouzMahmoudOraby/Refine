@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../widgets/custom_button.dart';
-import '../widgets/custom_form.dart';
 import '../pages/video_upload_page.dart';
 
 class SignInPage extends StatefulWidget {
@@ -12,20 +11,20 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   String errorMessage = '';
 
   Future<void> _loginUser() async {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text;
+    final email = emailController.text.trim();
+    final password = passwordController.text;
 
     if (email.isEmpty || password.isEmpty) {
       setState(() => errorMessage = 'Please fill in all fields');
       return;
     }
 
-    final url = Uri.parse('http://localhost:5000/api/login'); // Update this URL
+    final url = Uri.parse('http://192.168.1.58:5000/api/users/login');
 
     try {
       final response = await http.post(
@@ -37,7 +36,6 @@ class _SignInPageState extends State<SignInPage> {
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200 && data['success'] == true) {
-        // Navigate to video upload on successful login
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => VideoUploadPage()),
@@ -74,9 +72,9 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                   const SizedBox(height: 30),
 
-                  // Form Inputs
-                  CustomFormField(label: "E-mail", controller: _emailController),
-                  CustomFormField(label: "Password", isPassword: true, controller: _passwordController),
+                  // UPDATED FORM FIELDS
+                  CustomFormField(label: "e-mail", controller: emailController),
+                  CustomFormField(label: "password", isPassword: true, controller: passwordController),
 
                   const SizedBox(height: 10),
 
@@ -97,6 +95,7 @@ class _SignInPageState extends State<SignInPage> {
                   ),
 
                   const SizedBox(height: 20),
+
                   CustomButton(
                     text: '',
                     onPressed: () {
@@ -170,6 +169,34 @@ class _SignInPageState extends State<SignInPage> {
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 243, 255, 136),
         shape: BoxShape.circle,
+      ),
+    );
+  }
+}
+
+// Make sure this version of CustomFormField is in your project:
+class CustomFormField extends StatelessWidget {
+  final String label;
+  final TextEditingController controller;
+  final bool isPassword;
+
+  const CustomFormField({
+    required this.label,
+    required this.controller,
+    this.isPassword = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: TextField(
+        controller: controller,
+        obscureText: isPassword,
+        decoration: InputDecoration(
+          labelText: label,
+          border: OutlineInputBorder(),
+        ),
       ),
     );
   }
