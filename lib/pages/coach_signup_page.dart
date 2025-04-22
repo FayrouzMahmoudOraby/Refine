@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
 import '../widgets/custom_button.dart';
 import '../widgets/custom_form.dart';
 import '../widgets/RotatingTextCircle.dart';
 import '../pages/signin_page.dart';
+import '../pages/CoachPlayerPage.dart';
 
 class CoachSignUpPage extends StatefulWidget {
   @override
@@ -181,6 +181,29 @@ class _CoachSignUpPageState extends State<CoachSignUpPage> {
                         SizedBox(width: 10),
                         Text(
                           'Continue with Apple',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ),
+                  CustomButton(
+                    text: '',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CoachPlayerPage(),
+                        ),
+                      );
+                    },
+                    bgColor: Colors.black,
+                    textColor: Colors.white,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(width: 10),
+                        Text(
+                          'Test Coach',
                           style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
                       ],
