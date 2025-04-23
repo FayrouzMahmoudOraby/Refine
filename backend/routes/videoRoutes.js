@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const axios = require('axios');
+const FormData = require('form-data');
 const Report = require('../models/Report');
 
 const router = express.Router();
@@ -19,25 +20,33 @@ router.post('/upload', upload.single('video'), async (req, res) => {
             return res.status(400).json({ error: 'No video file uploaded' });
         }
 
-        // Forward the video to the AI API
+        // Create a FormData object to send to the AI API
         const formData = new FormData();
-        formData.append('file', videoFile.buffer, { filename: videoFile.originalname });
+        formData.append('file', videoFile.buffer, {
+            filename: videoFile.originalname,
+            contentType: videoFile.mimetype,
+        });
 
+        // Forward the video to the AI API
         const aiApiResponse = await axios.post(process.env.AI_API_ENDPOINT, formData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
+            headers: { ...formData.getHeaders() }, // Include multipart/form-data headers
         });
 
         // Save the analysis in MongoDB
         const report = new Report({
             userId,
-            videoUrl: `uploads/${videoFile.originalname}`,
-            analysis: aiApiResponse.data.player
+            videoUrl: `uploads/${videoFile.originalname}`, // Optional: Store video URL if needed
+            analysis: aiApiResponse.data.player, // AI API's analysis result
         });
         await report.save();
 
-        res.status(200).json({ message: 'Analysis complete', report: aiApiResponse.data.player });
+        // Respond to the Flutter app with the AI API's analysis
+        res.status(200).json({
+            message: 'Analysis complete',
+            report: aiApiResponse.data.player,
+        });
     } catch (error) {
-        console.error(error);
+        console.error('Error processing video:', error);
         res.status(500).json({ error: 'Failed to process video' });
     }
 });
