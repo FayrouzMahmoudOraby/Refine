@@ -1,0 +1,94 @@
+{
+  "player": {
+    "isCorrect": true,
+    "movement": "backhand",
+    "prediction": "backhand",
+    "joints": [
+      {
+        "joint": "nose",
+        "x": 0.46,
+        "y": 0.31
+      },
+      {
+        "joint": "left_eye",
+        "x": 0.48,
+        "y": 0.29
+      },
+      {
+        "joint": "right_eye",
+        "x": 0.46,
+        "y": 0.27
+      },
+      {
+        "joint": "left_ear",
+        "x": 0.54,
+        "y": 0.25
+      },
+      {
+        "joint": "right_ear",
+        "x": 0.46,
+        "y": 0.29
+      },
+      {
+        "joint": "left_shoulder",
+        "x": 0.56,
+        "y": 0.29
+      },
+      {
+        "joint": "right_shoulder",
+        "x": 0.42,
+        "y": 0.33
+      },
+      {
+        "joint": "left_elbow",
+        "x": 0.58,
+        "y": 0.4
+      },
+      {
+        "joint": "right_elbow",
+        "x": 0.38,
+        "y": 0.44
+      },
+      {
+        "joint": "left_wrist",
+        "x": 0.6,
+        "y": 0.44
+      },
+      {
+        "joint": "right_wrist",
+        "x": 0.35,
+        "y": 0.46
+      },
+      {
+        "joint": "left_hip",
+        "x": 0.5,
+        "y": 0.48
+      },
+      {
+        "joint": "right_hip",
+        "x": 0.46,
+        "y": 0.46
+      },
+      {
+        "joint": "left_knee",
+        "x": 0.54,
+        "y": 0.56
+      },
+      {
+        "joint": "right_knee",
+        "x": 0.52,
+        "y": 0.56
+      },
+      {
+        "joint": "left_ankle",
+        "x": 0.52,
+        "y": 0.71
+      },
+      {
+        "joint": "right_ankle",
+        "x": 0.52,
+        "y": 0.71
+      }
+    ]
+  }
+}

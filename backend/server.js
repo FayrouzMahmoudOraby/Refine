@@ -24,7 +24,9 @@ app.use(express.json());
 
 // Routes
 const userRoutes = require('./routes/users');
+const videoRoutes = require('./routes/videoRoutes');
 app.use('/api/users', userRoutes);
+app.use('/api/videos',videoRoutes);
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI, {

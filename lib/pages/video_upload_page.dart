@@ -1,8 +1,9 @@
-import 'dart:typed_data';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:camera/camera.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class VideoUploadPage extends StatefulWidget {
   @override
@@ -11,32 +12,20 @@ class VideoUploadPage extends StatefulWidget {
 
 class _VideoUploadPageState extends State<VideoUploadPage> {
   bool _isPermissionGranted = false;
-  bool _isRecording = false;
-  bool _isPaused = false;
-
-  // Mobile camera properties
-  CameraController? _cameraController;
   bool _isUploading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _checkMobilePermission();
-  }
 
   // Mobile-specific permission check (iOS/Android)
   Future<void> _checkMobilePermission() async {
-    final status = await Permission.camera.status;
+    final status = await Permission.storage.status;
     if (status.isGranted) {
       setState(() {
         _isPermissionGranted = true;
       });
-      _initializeCamera();
     } else {
       setState(() {
         _isPermissionGranted = false;
       });
-      _showErrorDialog('Permission Denied', 'Camera permission required.');
+      _showErrorDialog('Permission Denied', 'Storage permission required.');
     }
   }
 
@@ -61,20 +50,48 @@ class _VideoUploadPageState extends State<VideoUploadPage> {
     );
   }
 
-  // Handle file upload (mobile)
-  Future<void> _uploadVideo() async {
+  // Handle file upload to the backend API
+  Future<void> _uploadVideo(File videoFile) async {
     setState(() {
       _isUploading = true;
     });
 
-    // Simulate a delay for uploading
-    await Future.delayed(Duration(seconds: 2));
+    try {
+      // Create multipart request to send the video file
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+          'http://localhost:5000/api/videos/upload',
+        ), // Replace with your backend URL
+      );
 
-    setState(() {
-      _isUploading = false;
-    });
+      // Attach the video file
+      request.files.add(
+        await http.MultipartFile.fromPath('video', videoFile.path),
+      );
+      request.fields['userId'] = 'user123'; // Replace with the actual user ID
 
-    _showErrorDialog('Upload Successful', 'Your video has been uploaded.');
+      // Send the request and get the response
+      var response = await request.send();
+
+      if (response.statusCode == 200) {
+        // Parse the response body
+        var responseBody = await response.stream.bytesToString();
+        var parsedResponse = json.decode(responseBody);
+
+        // Show success dialog with analysis results
+        _showSuccessDialog(parsedResponse);
+      } else {
+        throw Exception('Failed to upload video');
+      }
+    } catch (error) {
+      // Handle errors
+      _showErrorDialog('Upload Failed', error.toString());
+    } finally {
+      setState(() {
+        _isUploading = false;
+      });
+    }
   }
 
   // Allow the user to select a video file (mobile)
@@ -82,48 +99,74 @@ class _VideoUploadPageState extends State<VideoUploadPage> {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.video,
     );
+
     if (result != null) {
-      // Simulate video upload
-      await _uploadVideo();
+      File videoFile = File(result.files.single.path!);
+      await _uploadVideo(videoFile); // Upload the selected video
     }
   }
 
-  // Initialize camera (mobile-only)
-  Future<void> _initializeCamera() async {
-    final cameras = await availableCameras();
-    if (cameras.isNotEmpty) {
-      _cameraController = CameraController(
-        cameras[0],
-        ResolutionPreset.medium,
-      );
-      await _cameraController?.initialize();
-    }
+  // Show a success dialog with analysis results
+  void _showSuccessDialog(Map<String, dynamic> analysis) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Analysis Complete'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SelectableText(
+                  'JSON Response:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 10),
+                SelectableText(
+                  JsonEncoder.withIndent('  ').convert(analysis),
+                  style: TextStyle(fontSize: 12),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkMobilePermission();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Video Upload / Recording')),
+      appBar: AppBar(title: Text('Video Upload')),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
               if (_isPermissionGranted)
-                Column(
-                  children: [
-                    // Mobile-specific camera preview
-                    if (_cameraController?.value.isInitialized ?? false)
-                      Container(
-                        height: 200,
-                        width: 200,
-                        child: CameraPreview(_cameraController!),
-                      ),
-                    ElevatedButton(
-                      onPressed: _pickVideo,
-                      child: Text('Upload Video'),
-                    ),
-                  ],
+                ElevatedButton(
+                  onPressed: _pickVideo,
+                  child: Text('Upload Video'),
+                ),
+              if (!_isPermissionGranted)
+                ElevatedButton(
+                  onPressed: _checkMobilePermission,
+                  child: Text('Grant Storage Permission'),
                 ),
               if (_isUploading) CircularProgressIndicator(),
             ],
