@@ -40,11 +40,14 @@ class _VideoUploadPageState extends State<VideoUploadPage> {
     });
 
     try {
+      print('Uploading video to: http://192.168.1.58:5000/api/videos/upload');
+      print('File path: ${videoFile.path}');
+
       // Create multipart request to send the video file
       var request = http.MultipartRequest(
         'POST',
         Uri.parse(
-          'http://192.168.1.58:500/api/videos/upload',
+          'http://192.168.1.58:5000/api/videos/upload',
         ), // Replace with your backend URL
       );
 
@@ -67,7 +70,9 @@ class _VideoUploadPageState extends State<VideoUploadPage> {
         // Show success dialog with analysis results
         _showSuccessDialog(parsedResponse);
       } else {
-        throw Exception('Failed to upload video');
+        throw Exception(
+          'Failed to upload video. Status code: ${response.statusCode}',
+        );
       }
     } catch (error) {
       // Handle errors
