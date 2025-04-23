@@ -12,8 +12,8 @@ class _ChatbotPageState extends State<ChatbotPage> {
   String _response = '';
 
   Future<String> sendMovementToGPT(Map<String, dynamic> movementData) async {
-    const apiKey = 'YOUR_OPENAI_API_KEY';
-  
+    const apiKey = 'YOUR_API_KEY_HERE'; // Replace with your actual API key
+
     // Define the system message with the tennis rulebook
     const systemMessage = '''
     You are a tennis movement analysis expert. A JSON object will be sent to you with:
@@ -54,12 +54,31 @@ class _ChatbotPageState extends State<ChatbotPage> {
   }
 
   void _getResponse() async {
+    // Sample JSON structure you want to send
     Map<String, dynamic> movementData = {
-      'movement_type': 'serve',
-      'is_correct': false,
-      'joint_positions': {
-        'elbow': 'incorrect', // Example position, modify as needed
-        'shoulder': 'aligned',
+      'player': {
+        'isCorrect': true,
+        'movement': 'backhand',
+        'prediction': 'backhand',
+        'joints': [
+          {'joint': 'nose', 'x': 0.46, 'y': 0.31},
+          {'joint': 'left_eye', 'x': 0.48, 'y': 0.29},
+          {'joint': 'right_eye', 'x': 0.46, 'y': 0.27},
+          {'joint': 'left_ear', 'x': 0.54, 'y': 0.25},
+          {'joint': 'right_ear', 'x': 0.46, 'y': 0.29},
+          {'joint': 'left_shoulder', 'x': 0.56, 'y': 0.29},
+          {'joint': 'right_shoulder', 'x': 0.42, 'y': 0.33},
+          {'joint': 'left_elbow', 'x': 0.58, 'y': 0.4},
+          {'joint': 'right_elbow', 'x': 0.38, 'y': 0.44},
+          {'joint': 'left_wrist', 'x': 0.6, 'y': 0.44},
+          {'joint': 'right_wrist', 'x': 0.35, 'y': 0.46},
+          {'joint': 'left_hip', 'x': 0.5, 'y': 0.48},
+          {'joint': 'right_hip', 'x': 0.46, 'y': 0.46},
+          {'joint': 'left_knee', 'x': 0.54, 'y': 0.56},
+          {'joint': 'right_knee', 'x': 0.52, 'y': 0.56},
+          {'joint': 'left_ankle', 'x': 0.52, 'y': 0.71},
+          {'joint': 'right_ankle', 'x': 0.52, 'y': 0.71},
+        ],
       },
     };
 
@@ -78,9 +97,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Tennis Movement Analysis'),
-      ),
+      appBar: AppBar(title: Text('Tennis Movement Analysis')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -89,16 +106,14 @@ class _ChatbotPageState extends State<ChatbotPage> {
               controller: _movementController,
               decoration: InputDecoration(
                 labelText: 'Enter Movement Data (JSON format)',
-                hintText: '{"movement_type": "forehand", "is_correct": true, "joint_positions": {}}',
+                hintText:
+                    '{"player": {"isCorrect": true, "movement": "backhand", "joints": [...]}}',
                 border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.text,
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _getResponse,
-              child: Text('Send to GPT'),
-            ),
+            ElevatedButton(onPressed: _getResponse, child: Text('Send to GPT')),
             SizedBox(height: 20),
             Text(
               'Response from GPT-4:',
