@@ -22,10 +22,14 @@ class _VideoUploadPageState extends State<VideoUploadPage> {
         _isPermissionGranted = true;
       });
     } else {
+      final result = await Permission.storage.request();
       setState(() {
-        _isPermissionGranted = false;
+        _isPermissionGranted = result.isGranted;
       });
-      _showErrorDialog('Permission Denied', 'Storage permission required.');
+
+      if (!_isPermissionGranted) {
+        _showErrorDialog('Permission Denied', 'Storage permission required.');
+      }
     }
   }
 
@@ -146,7 +150,7 @@ class _VideoUploadPageState extends State<VideoUploadPage> {
   @override
   void initState() {
     super.initState();
-    _checkMobilePermission();
+    _checkMobilePermission(); // Check permission when the app starts
   }
 
   @override
@@ -164,9 +168,17 @@ class _VideoUploadPageState extends State<VideoUploadPage> {
                   child: Text('Upload Video'),
                 ),
               if (!_isPermissionGranted)
-                ElevatedButton(
-                  onPressed: _checkMobilePermission,
-                  child: Text('Grant Storage Permission'),
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Storage permission is required to upload videos.'),
+                      ElevatedButton(
+                        onPressed: _checkMobilePermission,
+                        child: Text('Request Permission'),
+                      ),
+                    ],
+                  ),
                 ),
               if (_isUploading) CircularProgressIndicator(),
             ],
