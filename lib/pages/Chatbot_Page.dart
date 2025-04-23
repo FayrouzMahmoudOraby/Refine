@@ -12,7 +12,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
   String _response = '';
 
   Future<String> sendMovementToGPT(Map<String, dynamic> movementData) async {
-    const apiKey = 'YOUR_API_KEY_HERE'; // Replace with your actual API key
+    const apiKey = ''; // Replace with your actual API key
 
     // Define the system message with the tennis rulebook
     const systemMessage = '''
