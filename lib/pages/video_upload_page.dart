@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -11,38 +10,7 @@ class VideoUploadPage extends StatefulWidget {
 }
 
 class _VideoUploadPageState extends State<VideoUploadPage> {
-  bool _isPermissionGranted = false;
   bool _isUploading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _checkMobilePermission();
-  }
-
-  // Check and request permissions for Android/iOS
-  Future<void> _checkMobilePermission() async {
-    final status = await Permission.storage.status;
-
-    if (status.isGranted) {
-      setState(() {
-        _isPermissionGranted = true;
-      });
-    } else {
-      final result = await Permission.storage.request();
-
-      if (result.isGranted) {
-        setState(() {
-          _isPermissionGranted = true;
-        });
-      } else {
-        setState(() {
-          _isPermissionGranted = false;
-        });
-        _showErrorDialog('Permission Denied', 'Storage permission required.');
-      }
-    }
-  }
 
   // Show a dialog with an error message
   void _showErrorDialog(String title, String message) {
@@ -76,7 +44,7 @@ class _VideoUploadPageState extends State<VideoUploadPage> {
       var request = http.MultipartRequest(
         'POST',
         Uri.parse(
-          'http://10.0.2.2:8000/api/videos/upload',
+          'http://192.168.1.58:500/api/videos/upload',
         ), // Replace with your backend URL
       );
 
@@ -171,16 +139,10 @@ class _VideoUploadPageState extends State<VideoUploadPage> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              if (_isPermissionGranted)
-                ElevatedButton(
-                  onPressed: _pickVideo,
-                  child: Text('Upload Video'),
-                ),
-              if (!_isPermissionGranted)
-                ElevatedButton(
-                  onPressed: _checkMobilePermission,
-                  child: Text('Grant Storage Permission'),
-                ),
+              ElevatedButton(
+                onPressed: _pickVideo,
+                child: Text('Upload Video'),
+              ),
               if (_isUploading) CircularProgressIndicator(),
             ],
           ),
