@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:refine_app/pages/Chatbot_Page.dart';
 import '../pages/coach_signup_page.dart';
 import '../pages/player_signup_page.dart';
 
@@ -67,6 +68,27 @@ class SelectionPage extends StatelessWidget {
 
                 // Coach Button
                 customButton(context, "Coach"),
+
+                const SizedBox(height: 20),
+
+                // **New Chatbot Button**
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ChatbotPage()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange.withOpacity(0.8),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+                    textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    elevation: 5,
+                  ),
+                  child: const Text("Go to Chatbot"),
+                ),
               ],
             ),
           ),
