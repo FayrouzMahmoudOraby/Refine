@@ -24,7 +24,7 @@ class _VideoUploadPageState extends State<VideoUploadPage> {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://192.168.1.58:5000/api/videos/upload'),
+        Uri.parse('http://10.0.2.2:5000/api/videos/upload'),
       );
 
       request.files.add(
@@ -38,7 +38,9 @@ class _VideoUploadPageState extends State<VideoUploadPage> {
       if (response.statusCode == 200) {
         final parsedResponse = json.decode(responseBody);
         setState(() {
-          _technicalAnalysis = JsonEncoder.withIndent('  ').convert(parsedResponse['technicalAnalysis']);
+          _technicalAnalysis = JsonEncoder.withIndent(
+            '  ',
+          ).convert(parsedResponse['technicalAnalysis']);
           _coachFeedback = parsedResponse['coachFeedback'];
         });
       } else {
