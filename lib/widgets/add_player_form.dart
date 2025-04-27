@@ -10,6 +10,7 @@ class AddPlayerFormPage extends StatefulWidget {
 class _AddPlayerFormPageState extends State<AddPlayerFormPage> {
   final _formKey = GlobalKey<FormState>();
   String name = "";
+  String age = "";
   String description = "";
 
   @override
@@ -34,6 +35,15 @@ class _AddPlayerFormPageState extends State<AddPlayerFormPage> {
               ),
               const SizedBox(height: 15),
               TextFormField(
+                decoration: const InputDecoration(labelText: "Age"),
+                keyboardType: TextInputType.number,
+                validator:
+                    (value) =>
+                        value == null || value.isEmpty ? "Enter an age" : null,
+                onSaved: (value) => age = value!,
+              ),
+              const SizedBox(height: 15),
+              TextFormField(
                 decoration: const InputDecoration(labelText: "Description"),
                 validator:
                     (value) =>
@@ -49,6 +59,7 @@ class _AddPlayerFormPageState extends State<AddPlayerFormPage> {
                     _formKey.currentState!.save();
                     Navigator.pop(context, {
                       'name': name,
+                      'age': age,
                       'description': description,
                     });
                   }
@@ -56,11 +67,10 @@ class _AddPlayerFormPageState extends State<AddPlayerFormPage> {
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 30,
-                    vertical: 15,
+                    vertical: 10,
                   ),
-                  backgroundColor: Colors.blue,
                 ),
-                child: const Text("Submit"),
+                child: const Text("Add Player"),
               ),
             ],
           ),

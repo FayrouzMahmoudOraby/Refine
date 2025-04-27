@@ -17,7 +17,7 @@ app.use(limiter);
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: 'http://localhost:3000', // your Flutter Web or app dev URL
+  origin: 'http://localhost:5000', // your Flutter Web or app dev URL
   credentials: true,
 }));
 app.use(express.json());
@@ -25,10 +25,12 @@ app.use(express.json());
 // Routes
 const userRoutes = require('./routes/users');
 const videoRoutes = require('./routes/videoRoutes');
+const coachPlayersRoutes = require('./routes/coachplayerRoute');
+app.use('/api/coachplayers', coachPlayersRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/videos',videoRoutes);
-
 // MongoDB Connection
+
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

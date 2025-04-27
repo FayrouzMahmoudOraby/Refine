@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import '../widgets/add_player_form.dart';
+import '../pages/player_detail_page.dart';
 
 class CoachPlayerPage extends StatefulWidget {
   const CoachPlayerPage({super.key});
@@ -9,18 +12,61 @@ class CoachPlayerPage extends StatefulWidget {
 }
 
 class _CoachPlayerPageState extends State<CoachPlayerPage> {
-  List<Map<String, String>> players = [];
+  List<Map<String, dynamic>> players = [];
 
-  void addPlayer(Map<String, String> player) {
-    setState(() {
-      players.add(player);
-    });
+  final String baseUrl =
+      'http://10.0.2.2:5000/api/coachplayers/'; // ← change to your server
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPlayers();
   }
 
-  void removePlayer(int index) {
-    setState(() {
-      players.removeAt(index);
-    });
+  Future<void> fetchPlayers() async {
+    final response = await http.get(Uri.parse('$baseUrl/'));
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      setState(() {
+        players =
+            data
+                .map(
+                  (player) => {
+                    '_id': player['_id'], // to be able to delete later
+                    'name': player['name'],
+                    'age': player['age'],
+                    'description': player['description'],
+                  },
+                )
+                .toList();
+      });
+    } else {
+      // handle error
+    }
+  }
+
+  Future<void> addPlayer(Map<String, String> player) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(player),
+    );
+
+    if (response.statusCode == 201) {
+      fetchPlayers(); // refresh after adding
+    } else {
+      // handle error
+    }
+  }
+
+  Future<void> removePlayer(String id) async {
+    final response = await http.delete(Uri.parse('$baseUrl/$id'));
+
+    if (response.statusCode == 200) {
+      fetchPlayers(); // refresh after delete
+    } else {
+      // handle error
+    }
   }
 
   @override
@@ -49,10 +95,7 @@ class _CoachPlayerPageState extends State<CoachPlayerPage> {
             ),
             const SizedBox(height: 20),
             Container(
-              margin: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 20,
-              ), // ← Margin added
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               padding: const EdgeInsets.all(20),
               decoration: const BoxDecoration(color: Color(0xFF30C3E2)),
               child: Column(
@@ -72,8 +115,6 @@ class _CoachPlayerPageState extends State<CoachPlayerPage> {
                     style: TextStyle(color: Colors.white70),
                   ),
                   const SizedBox(height: 20),
-
-                  // 🆕 Add Player Button (moved inside)
                   Center(
                     child: ElevatedButton.icon(
                       onPressed: () async {
@@ -85,7 +126,7 @@ class _CoachPlayerPageState extends State<CoachPlayerPage> {
                         );
 
                         if (result != null && result is Map<String, String>) {
-                          addPlayer(result);
+                          await addPlayer(result);
                         }
                       },
                       icon: const Icon(Icons.add),
@@ -99,21 +140,20 @@ class _CoachPlayerPageState extends State<CoachPlayerPage> {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 20),
-
-                  ...players.asMap().entries.map((entry) {
-                    int index = entry.key;
-                    Map<String, String> player = entry.value;
+                  ...players.map((player) {
                     return PlayerCard(
                       name: player['name']!,
                       description: player['description']!,
-                      onDelete: () => removePlayer(index),
+                      onDelete: () => removePlayer(player['_id']),
                       onNext: () {
-                        // handle "Next" button action here
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Next pressed for ${player['name']}'),
+                        // Navigate to PlayerDetailPage with the player ID
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (_) =>
+                                    PlayerDetailPage(playerId: player['_id']),
                           ),
                         );
                       },
@@ -152,7 +192,7 @@ class PlayerCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // Align everything left
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Align(
               alignment: Alignment.centerLeft,
@@ -171,7 +211,6 @@ class PlayerCard extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   fontSize: 35,
                 ),
-                textAlign: TextAlign.left,
               ),
             ),
             const SizedBox(height: 5),
@@ -184,10 +223,8 @@ class PlayerCard extends StatelessWidget {
                   color: Colors.black87,
                   fontWeight: FontWeight.w100,
                 ),
-                textAlign: TextAlign.left,
               ),
             ),
-
             const SizedBox(height: 15),
             Padding(
               padding: const EdgeInsets.only(left: 45.0),
@@ -205,6 +242,7 @@ class PlayerCard extends StatelessWidget {
                     ),
                     child: const Text("Delete"),
                   ),
+                  const SizedBox(width: 10),
                   ElevatedButton(
                     onPressed: onNext,
                     style: ElevatedButton.styleFrom(
