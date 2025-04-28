@@ -7,7 +7,8 @@ class CustomFormField extends StatelessWidget {
   const CustomFormField({
     Key? key,
     required this.label,
-    this.isPassword = false, required TextEditingController controller,
+    this.isPassword = false,
+    required TextEditingController controller,
   }) : super(key: key);
 
   @override

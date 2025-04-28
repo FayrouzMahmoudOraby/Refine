@@ -55,7 +55,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                 onSelected: (_) {
                   setState(() => selectedType = 'freelance');
                 },
-                selectedColor: Colors.deepPurpleAccent, // Glowing AI color
+                selectedColor: Colors.deepPurpleAccent,
                 backgroundColor: Colors.transparent,
                 labelStyle: const TextStyle(fontWeight: FontWeight.bold),
               ),
