@@ -6,16 +6,16 @@ import '../widgets/custom_button.dart';
 import '../widgets/RotatingTextCircle.dart';
 import '../pages/signin_page.dart';
 
-class PlayerSignUpPage extends StatefulWidget {
+class UserSignUpPage extends StatefulWidget {
   final String role;
 
-  const PlayerSignUpPage({Key? key, required this.role}) : super(key: key);
+  const UserSignUpPage({Key? key, required this.role}) : super(key: key);
 
   @override
-  _CoachSignUpPageState createState() => _CoachSignUpPageState();
+  SignUpPageState createState() => SignUpPageState();
 }
 
-class _CoachSignUpPageState extends State<PlayerSignUpPage> {
+class SignUpPageState extends State<UserSignUpPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();

@@ -88,14 +88,14 @@ class SelectionPage extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => PlayerSignUpPage(role: 'player'),
+              builder: (context) => UserSignUpPage(role: 'player'),
             ),
           );
         } else if (text == "Coach") {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => PlayerSignUpPage(role: 'coach'),
+              builder: (context) => UserSignUpPage(role: 'coach'),
             ),
           );
         }
