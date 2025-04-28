@@ -71,8 +71,6 @@ class SelectionPage extends StatelessWidget {
                 const SizedBox(height: 20),
 
                 // **New Chatbot Button**
-
-              
               ],
             ),
           ),
@@ -89,12 +87,16 @@ class SelectionPage extends StatelessWidget {
         if (text == "Player") {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => PlayerSignUpPage()),
+            MaterialPageRoute(
+              builder: (context) => PlayerSignUpPage(role: 'player'),
+            ),
           );
         } else if (text == "Coach") {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CoachSignUpPage()),
+            MaterialPageRoute(
+              builder: (context) => PlayerSignUpPage(role: 'coach'),
+            ),
           );
         }
       },

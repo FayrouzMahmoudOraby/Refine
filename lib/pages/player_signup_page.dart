@@ -7,6 +7,10 @@ import '../widgets/RotatingTextCircle.dart';
 import '../pages/signin_page.dart';
 
 class PlayerSignUpPage extends StatefulWidget {
+  final String role;
+
+  const PlayerSignUpPage({Key? key, required this.role}) : super(key: key);
+
   @override
   _CoachSignUpPageState createState() => _CoachSignUpPageState();
 }
@@ -46,7 +50,7 @@ class _CoachSignUpPageState extends State<PlayerSignUpPage> {
         'email': emailController.text,
         'password': passwordController.text,
         'phone': phoneController.text,
-        'role': 'player',
+        'role': widget.role,
       }),
     );
 
@@ -97,7 +101,10 @@ class _CoachSignUpPageState extends State<PlayerSignUpPage> {
                       height: 200,
                       width: 200,
                       child: RotatingTextCircle(
-                        dynamicWord: " Player Sign Up Player Sign Up",
+                        dynamicWord:
+                            widget.role == 'coach'
+                                ? " Coach Sign Up Coach Sign Up"
+                                : " Player Sign Up Player Sign Up",
                       ),
                     ),
                     const SizedBox(height: 30),
