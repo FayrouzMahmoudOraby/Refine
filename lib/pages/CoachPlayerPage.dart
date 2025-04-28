@@ -15,7 +15,7 @@ class _CoachPlayerPageState extends State<CoachPlayerPage> {
   List<Map<String, dynamic>> players = [];
 
   final String baseUrl =
-      'http://10.0.2.2:5000/api/coachplayers/'; // ← change to your server
+      'http://192.168.3.153:5000/api/coachplayers/'; // ← change to your server
 
   @override
   void initState() {

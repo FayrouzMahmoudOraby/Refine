@@ -31,7 +31,7 @@ class _CoachSignUpPageState extends State<PlayerSignUpPage> {
     print('Password: ${passwordController.text}');
     print('Phone: ${phoneController.text}');
   
-    final url = Uri.parse('http://192.168.1.58:5000/api/users');
+    final url = Uri.parse('http://192.168.3.153:5000/api/users');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
