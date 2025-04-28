@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
     match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email address'],
   },
-  password: { type: String, required: true }, // Password field added
+  password: { type: String, required: true },
   phone: { type: String },
   role: {
     type: String,
@@ -19,7 +19,6 @@ const userSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
-// Hash password before saving
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   const salt = await bcrypt.genSalt(10);

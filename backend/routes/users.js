@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const auth = require('../middleware/auth');
 
 // Load secret from .env
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -24,6 +25,7 @@ router.post('/', async (req, res) => {
 });
 
 // ✅ LOGIN
+// In your login route (routes/users.js)
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -36,16 +38,24 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: '1d' });
 
-    res.status(200).json({ message: 'Login successful', token, user });
+    res.status(200).json({ 
+      success: true,
+      message: 'Login successful', 
+      token, 
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role  // Make sure this is included
+      } 
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
-const auth = require('../middleware/auth');
+// Protected route example
 router.get('/me', auth, (req, res) => {
-  // req.user will have the userId and role
-  res.json({ message: 'Protected data' });
+  res.json({ message: 'Protected data', user: req.user });
 });
-
 
 module.exports = router;

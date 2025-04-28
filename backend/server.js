@@ -28,9 +28,9 @@ const videoRoutes = require('./routes/videoRoutes');
 const coachPlayersRoutes = require('./routes/coachplayerRoute');
 app.use('/api/coachplayers', coachPlayersRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/videos',videoRoutes);
-// MongoDB Connection
+app.use('/api/videos', videoRoutes);
 
+// MongoDB Connection
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

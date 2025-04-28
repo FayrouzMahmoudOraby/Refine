@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import '../pages/coach_landing.dart';
 import '../widgets/custom_button.dart';
 import '../pages/video_upload_page.dart';
+import '../pages/playerdashboardpage.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -36,10 +37,23 @@ class _SignInPageState extends State<SignInPage> {
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200 && data['success'] == true) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => VideoUploadPage()),
-        );
+        // Check user role and navigate accordingly
+        final userRole = data['user']['role'];
+
+        if (userRole == 'coach') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => CoachDashboardPage()),
+          );
+        } else {
+          // For players or other roles
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PlayerDashboardPage(),
+            ), // Create this if needed
+          );
+        }
       } else {
         setState(() => errorMessage = data['message'] ?? 'Login failed');
       }
@@ -74,7 +88,11 @@ class _SignInPageState extends State<SignInPage> {
 
                   // UPDATED FORM FIELDS
                   CustomFormField(label: "e-mail", controller: emailController),
-                  CustomFormField(label: "password", isPassword: true, controller: passwordController),
+                  CustomFormField(
+                    label: "password",
+                    isPassword: true,
+                    controller: passwordController,
+                  ),
 
                   const SizedBox(height: 10),
 
@@ -88,10 +106,7 @@ class _SignInPageState extends State<SignInPage> {
 
                   Align(
                     alignment: Alignment.centerRight,
-                    child: CustomButton(
-                      text: "Submit",
-                      onPressed: _loginUser,
-                    ),
+                    child: CustomButton(text: "Submit", onPressed: _loginUser),
                   ),
 
                   const SizedBox(height: 20),
@@ -108,8 +123,10 @@ class _SignInPageState extends State<SignInPage> {
                       children: [
                         Image.asset('assets/google.png', height: 24),
                         SizedBox(width: 10),
-                        Text('Continue with Google',
-                            style: TextStyle(color: Colors.black, fontSize: 16)),
+                        Text(
+                          'Continue with Google',
+                          style: TextStyle(color: Colors.black, fontSize: 16),
+                        ),
                       ],
                     ),
                   ),
@@ -125,10 +142,16 @@ class _SignInPageState extends State<SignInPage> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Image.asset('assets/apple-logo.png', height: 24, color: Colors.white),
+                        Image.asset(
+                          'assets/apple-logo.png',
+                          height: 24,
+                          color: Colors.white,
+                        ),
                         SizedBox(width: 10),
-                        Text('Continue with Apple',
-                            style: TextStyle(color: Colors.white, fontSize: 16)),
+                        Text(
+                          'Continue with Apple',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
                       ],
                     ),
                   ),
