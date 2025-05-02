@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../pages/coach_signup_page.dart';
 import '../pages/player_signup_page.dart';
 
 class SelectionPage extends StatelessWidget {
@@ -66,9 +65,7 @@ class SelectionPage extends StatelessWidget {
                 const SizedBox(height: 20),
 
                 // Coach Button
-                customButton(context, "Coach"),
 
-                const SizedBox(height: 20),
 
                 // **New Chatbot Button**
               ],
@@ -89,13 +86,6 @@ class SelectionPage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => UserSignUpPage(role: 'player'),
-            ),
-          );
-        } else if (text == "Coach") {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => UserSignUpPage(role: 'coach'),
             ),
           );
         }

@@ -5,6 +5,7 @@ import '../pages/coach_landing.dart';
 import '../widgets/custom_button.dart';
 import '../pages/video_upload_page.dart';
 import '../pages/playerdashboardpage.dart';
+import '../pages/admin_page.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -25,43 +26,49 @@ class _SignInPageState extends State<SignInPage> {
       return;
     }
 
-    final url = Uri.parse('http://192.168.3.153:5000/api/users/login');
+    final url = Uri.parse('http://192.168.1.58:5000/api/users/login');
 
     try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'email': email, 'password': password}),
-      );
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email, 'password': password}),
+    );
 
-      final data = jsonDecode(response.body);
+    final data = jsonDecode(response.body);
 
-      if (response.statusCode == 200 && data['success'] == true) {
-        // Check user role and navigate accordingly
-        final userRole = data['user']['role'];
-
-        if (userRole == 'coach') {
+    if (response.statusCode == 200 && data['success'] == true) {
+      // Role-based navigation
+      switch (data['user']['role']) {
+        case 'admin':
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => AdminDashboardPage()),
+          );
+          break;
+        case 'coach':
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => CoachDashboardPage()),
           );
-        } else {
-          // For players or other roles
+          break;
+        case 'player':
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
-              builder: (context) => PlayerDashboardPage(),
-            ), // Create this if needed
+            MaterialPageRoute(builder: (context) => PlayerDashboardPage()),
           );
-        }
-      } else {
-        setState(() => errorMessage = data['message'] ?? 'Login failed');
+          break;
+        default:
+          // Handle unknown role
+          setState(() => errorMessage = 'Unknown user role');
       }
-    } catch (e) {
-      setState(() => errorMessage = 'Something went wrong. Please try again.');
+    } else {
+      setState(() => errorMessage = data['message'] ?? 'Login failed');
     }
+  } catch (e) {
+    setState(() => errorMessage = 'Something went wrong. Please try again.');
   }
-
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -26,9 +26,11 @@ app.use(express.json());
 const userRoutes = require('./routes/users');
 const videoRoutes = require('./routes/videoRoutes');
 const coachPlayersRoutes = require('./routes/coachplayerRoute');
+const adminRoutes = require('./routes/admin');
 app.use('/api/coachplayers', coachPlayersRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/videos', videoRoutes);
+app.use('/api/admin', adminRoutes);
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI, {

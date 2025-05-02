@@ -12,11 +12,12 @@ const userSchema = new mongoose.Schema({
   },
   password: { type: String, required: true },
   phone: { type: String },
+  // In your user model (models/User.js)
   role: {
     type: String,
-    enum: ['coach', 'player'],
+    enum: ['coach', 'player', 'admin'],  // Added 'admin'
     required: true,
-  },
+  }
 }, { timestamps: true });
 
 userSchema.pre('save', async function (next) {
