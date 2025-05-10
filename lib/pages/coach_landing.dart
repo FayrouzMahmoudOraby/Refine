@@ -4,6 +4,9 @@ import '../pages/video_upload_page.dart';
 import '../pages/CoachPlayerPage.dart';
 import '../pages/assigned_to_trainees.dart';
 import '../widgets/custom_sidebar_drawer.dart'; // import your reusable drawer
+import '../pages/signin_page.dart';
+import '../pages/auth_service.dart';
+import '../pages/welcome_page.dart';
 
 class CoachDashboardPage extends StatelessWidget {
   @override
@@ -73,8 +76,17 @@ class CoachDashboardPage extends StatelessWidget {
           SidebarItem(
             title: 'Sign Out',
             icon: Icons.logout,
-            onTap: () {
-              Navigator.popUntil(context, (route) => route.isFirst);
+            onTap: () async {
+              await AuthService().clearSession();
+
+              // 2. Navigate to the welcome/sign-in screen
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                ), // or SignInPage() if you prefer
+                (route) => false, // This removes all routes
+              );
             },
           ),
         ],
@@ -121,11 +133,15 @@ class CoachDashboardPage extends StatelessWidget {
                       );
                     },
                   ),
-                  const SizedBox(height: 20),
                   CustomButton(
                     text: "Sign Out",
-                    onPressed: () {
+                    onPressed: () async {
+                      await AuthService().clearSession();
                       Navigator.popUntil(context, (route) => route.isFirst);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => SignInPage()),
+                      );
                     },
                     bgColor: Colors.white,
                     textColor: Colors.black,

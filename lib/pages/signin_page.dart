@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:refine_app/pages/auth_service.dart';
 import 'dart:convert';
 import '../pages/coach_landing.dart';
 import '../widgets/custom_button.dart';
-import '../pages/video_upload_page.dart';
 import '../pages/playerdashboardpage.dart';
 import '../pages/admin_page.dart';
 
@@ -26,7 +26,9 @@ class _SignInPageState extends State<SignInPage> {
       return;
     }
 
-    final url = Uri.parse('http://10.0.2.2:5000/api/users/login');
+
+    final url = Uri.parse('http://192.168.191.72:5000/api/users/login');
+
 
     try {
     final response = await http.post(
@@ -37,7 +39,14 @@ class _SignInPageState extends State<SignInPage> {
 
     final data = jsonDecode(response.body);
 
+// In your SignInPage (_loginUser method)
     if (response.statusCode == 200 && data['success'] == true) {
+      // Save user session
+      await AuthService().saveUserSession(
+        data['token'], // Make sure your backend returns a token
+        jsonEncode(data['user']), // Save user data as string
+      );
+      
       // Role-based navigation
       switch (data['user']['role']) {
         case 'admin':
@@ -59,9 +68,9 @@ class _SignInPageState extends State<SignInPage> {
           );
           break;
         default:
-          // Handle unknown role
           setState(() => errorMessage = 'Unknown user role');
       }
+
     } else {
       setState(() => errorMessage = data['message'] ?? 'Login failed');
     }

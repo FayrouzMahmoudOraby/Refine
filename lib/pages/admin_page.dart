@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import '../widgets/custom_button.dart';
 import '../pages/user_managment.dart';
 import '../widgets/custom_sidebar_drawer.dart'; // Reusable drawer
+import '../pages/signin_page.dart';
+import '../pages/auth_service.dart';
+import '../pages/welcome_page.dart';
 
 class AdminDashboardPage extends StatelessWidget {
   @override
@@ -43,8 +46,17 @@ class AdminDashboardPage extends StatelessWidget {
           SidebarItem(
             title: 'Sign Out',
             icon: Icons.logout,
-            onTap: () {
-              Navigator.popUntil(context, (route) => route.isFirst);
+            onTap: () async {
+              await AuthService().clearSession();
+
+              // 2. Navigate to the welcome/sign-in screen
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                ), // or SignInPage() if you prefer
+                (route) => false, // This removes all routes
+              );
             },
           ),
         ],
@@ -96,8 +108,13 @@ class AdminDashboardPage extends StatelessWidget {
                   const SizedBox(height: 20),
                   CustomButton(
                     text: "Sign Out",
-                    onPressed: () {
+                    onPressed: () async {
+                      await AuthService().clearSession();
                       Navigator.popUntil(context, (route) => route.isFirst);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => SignInPage()),
+                      );
                     },
                     bgColor: Colors.white,
                     textColor: Colors.black,

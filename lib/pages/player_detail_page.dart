@@ -14,7 +14,7 @@ class PlayerDetailPage extends StatefulWidget {
 class _PlayerDetailPageState extends State<PlayerDetailPage> {
   Map<String, dynamic> playerDetails = {}; // ✅ Initialize it empty
 
-  final String baseUrl = '10.0.2.2:5000/api/coachplayers/';
+  final String baseUrl = 'http://192.168.1.58:5000/api/coachplayers/';
 
   @override
   void initState() {
