@@ -26,5 +26,22 @@ userSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
+// Add this method to your User model
+userSchema.methods.updateProfile = async function(updates) {
+  const updatesKeys = Object.keys(updates);
+  
+  updatesKeys.forEach(key => {
+    if (key === 'password') return; // Handle password separately
+    this[key] = updates[key];
+  });
+  
+  if (updates.password) {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(updates.password, salt);
+  }
+  
+  await this.save();
+  return this;
+};
 
 module.exports = mongoose.model('User', userSchema);

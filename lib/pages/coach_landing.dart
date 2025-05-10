@@ -7,6 +7,7 @@ import '../widgets/custom_sidebar_drawer.dart'; // import your reusable drawer
 import '../pages/signin_page.dart';
 import '../pages/auth_service.dart';
 import '../pages/welcome_page.dart';
+import '../pages/profile_page.dart';
 
 class CoachDashboardPage extends StatelessWidget {
   @override
@@ -86,6 +87,16 @@ class CoachDashboardPage extends StatelessWidget {
                   builder: (context) => HomePage(),
                 ), // or SignInPage() if you prefer
                 (route) => false, // This removes all routes
+              );
+            },
+          ),
+          SidebarItem(
+            title: 'My Profile',
+            icon: Icons.person,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage()),
               );
             },
           ),

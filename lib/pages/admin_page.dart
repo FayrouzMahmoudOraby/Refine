@@ -5,6 +5,7 @@ import '../widgets/custom_sidebar_drawer.dart'; // Reusable drawer
 import '../pages/signin_page.dart';
 import '../pages/auth_service.dart';
 import '../pages/welcome_page.dart';
+import '../pages/profile_page.dart';
 
 class AdminDashboardPage extends StatelessWidget {
   @override
@@ -36,6 +37,7 @@ class AdminDashboardPage extends StatelessWidget {
               // Navigate to content management
             },
           ),
+          // Add this to your pageItems list in each dashboard
           SidebarItem(
             title: 'View Analytics',
             icon: Icons.bar_chart,
@@ -56,6 +58,16 @@ class AdminDashboardPage extends StatelessWidget {
                   builder: (context) => HomePage(),
                 ), // or SignInPage() if you prefer
                 (route) => false, // This removes all routes
+              );
+            },
+          ),
+          SidebarItem(
+            title: 'My Profile',
+            icon: Icons.person,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage()),
               );
             },
           ),

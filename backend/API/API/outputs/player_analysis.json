@@ -1,93 +1,93 @@
 {
   "player": {
     "isCorrect": true,
-    "movement": "backhand",
-    "prediction": "backhand",
+    "movement": "slice_service",
+    "prediction": "slice_service",
     "joints": [
       {
         "joint": "nose",
-        "x": 0.46,
-        "y": 0.31
+        "x": 0.65,
+        "y": 0.42
       },
       {
         "joint": "left_eye",
-        "x": 0.48,
-        "y": 0.29
+        "x": 0.6,
+        "y": 0.35
       },
       {
         "joint": "right_eye",
-        "x": 0.46,
-        "y": 0.27
+        "x": 0.56,
+        "y": 0.35
       },
       {
         "joint": "left_ear",
         "x": 0.54,
-        "y": 0.25
+        "y": 0.31
       },
       {
         "joint": "right_ear",
-        "x": 0.46,
-        "y": 0.29
+        "x": 0.56,
+        "y": 0.35
       },
       {
         "joint": "left_shoulder",
-        "x": 0.56,
-        "y": 0.29
+        "x": 0.71,
+        "y": 0.48
       },
       {
         "joint": "right_shoulder",
         "x": 0.42,
-        "y": 0.33
+        "y": 0.44
       },
       {
         "joint": "left_elbow",
-        "x": 0.58,
-        "y": 0.4
+        "x": 0.69,
+        "y": 0.73
       },
       {
         "joint": "right_elbow",
-        "x": 0.38,
-        "y": 0.44
+        "x": 0.35,
+        "y": 0.77
       },
       {
         "joint": "left_wrist",
-        "x": 0.6,
-        "y": 0.44
+        "x": 0.56,
+        "y": 0.71
       },
       {
         "joint": "right_wrist",
-        "x": 0.35,
-        "y": 0.46
+        "x": 0.33,
+        "y": 0.33
       },
       {
         "joint": "left_hip",
-        "x": 0.5,
-        "y": 0.48
+        "x": 0.54,
+        "y": 0.79
       },
       {
         "joint": "right_hip",
-        "x": 0.46,
-        "y": 0.46
+        "x": 0.4,
+        "y": 0.77
       },
       {
         "joint": "left_knee",
-        "x": 0.54,
-        "y": 0.56
+        "x": 0.6,
+        "y": 0.65
       },
       {
         "joint": "right_knee",
-        "x": 0.52,
-        "y": 0.56
+        "x": 0.29,
+        "y": 0.58
       },
       {
         "joint": "left_ankle",
         "x": 0.52,
-        "y": 0.71
+        "y": 0.67
       },
       {
         "joint": "right_ankle",
         "x": 0.52,
-        "y": 0.71
+        "y": 0.67
       }
     ]
   }

@@ -12,20 +12,18 @@ class AuthService {
   final String _userKey = 'user_data';
 
   // Save user session
-  Future<void> saveUserSession(String token, String userData) async {
-    await _storage.write(key: _tokenKey, value: token);
-    await _storage.write(key: _userKey, value: userData);
-  }
+    Future<void> saveUserSession(String token, String userData) async {
+      await _storage.write(key: _tokenKey, value: token);
+      await _storage.write(key: _userKey, value: userData);
+    }
 
-  // Get auth token
-  Future<String?> getToken() async {
-    return await _storage.read(key: _tokenKey);
-  }
+    Future<String?> getToken() async {
+      return await _storage.read(key: _tokenKey);
+    }
 
-  // Get user data
-  Future<String?> getUserData() async {
-    return await _storage.read(key: _userKey);
-  }
+    Future<String?> getUserData() async {
+      return await _storage.read(key: _userKey);
+    }
 
   // Clear session (logout)
   Future<void> clearSession() async {

@@ -27,7 +27,7 @@ class _UserManagementPageState extends State<UserManagementPage> {
   Future<void> fetchUsers() async {
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.191.72:5000/api/admin/users'),
+        Uri.parse('http://192.168.1.58:5000/api/admin/users'),
       );
 
       if (response.statusCode == 200) {

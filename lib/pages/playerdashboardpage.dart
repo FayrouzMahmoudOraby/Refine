@@ -5,6 +5,7 @@ import '../widgets/custom_sidebar_drawer.dart'; // use drawer-compatible sidebar
 import '../pages/auth_service.dart';
 import '../pages/welcome_page.dart';
 import '../pages/signin_page.dart';
+import '../pages/profile_page.dart';
 
 class PlayerDashboardPage extends StatelessWidget {
   const PlayerDashboardPage({super.key});
@@ -80,6 +81,16 @@ class PlayerDashboardPage extends StatelessWidget {
                   builder: (context) => HomePage(),
                 ), // or SignInPage() if you prefer
                 (route) => false, // This removes all routes
+              );
+            },
+          ),
+          SidebarItem(
+            title: 'My Profile',
+            icon: Icons.person,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage()),
               );
             },
           ),
