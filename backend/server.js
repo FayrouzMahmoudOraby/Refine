@@ -27,10 +27,14 @@ const userRoutes = require('./routes/users');
 const videoRoutes = require('./routes/videoRoutes');
 const coachPlayersRoutes = require('./routes/coachplayerRoute');
 const adminRoutes = require('./routes/admin');
+const trainingRoutes = require('./routes/training');
+
+
 app.use('/api/coachplayers', coachPlayersRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/videos', videoRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/trainings', trainingRoutes);
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI, {

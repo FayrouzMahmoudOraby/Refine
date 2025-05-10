@@ -23,10 +23,6 @@ router.post('/', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-// ✅ LOGIN
-// In your login route (routes/users.js)
-// In your users route (routes/users.js)
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -57,6 +53,14 @@ router.post('/login', async (req, res) => {
 // Protected route example
 router.get('/me', auth, (req, res) => {
   res.json({ message: 'Protected data', user: req.user });
+});
+router.get('/players', async (req, res) => {
+  try {
+    const players = await User.find({ role: 'player' });
+    res.status(200).json(players);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
 });
 
 module.exports = router;

@@ -1,12 +1,83 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_button.dart';
 import '../pages/video_upload_page.dart';
+import '../widgets/custom_sidebar_drawer.dart'; // use drawer-compatible sidebar
 
 class PlayerDashboardPage extends StatelessWidget {
+  const PlayerDashboardPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF005BBB),
+      backgroundColor: const Color(0xFF005BBB),
+      drawer: CustomSidebarDrawer(
+        userName: 'Player',
+        pageItems: [
+          SidebarItem(
+            title: 'Dashboard',
+            icon: Icons.dashboard,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PlayerDashboardPage()),
+              );
+            },
+          ),
+
+          SidebarItem(
+            title: 'Upload Videos',
+            icon: Icons.upload,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => VideoUploadPage()),
+              );
+            },
+          ),
+          SidebarItem(
+            title: "Today's Workout",
+            icon: Icons.sports_tennis,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => VideoUploadPage()),
+              );
+            },
+          ),
+          SidebarItem(
+            title: "My Attendance Report",
+            icon: Icons.person,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => VideoUploadPage()),
+              );
+            },
+          ),
+          SidebarItem(
+            title: "Payment History",
+            icon: Icons.payment,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => VideoUploadPage()),
+              );
+            },
+          ),
+          SidebarItem(
+            title: 'Sign Out',
+            icon: Icons.logout,
+            onTap: () {
+              Navigator.popUntil(context, (route) => route.isFirst);
+            },
+          ),
+        ],
+      ),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF005BBB),
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
       body: Stack(
         children: [
           Positioned(top: -90, left: -30, child: halfCircle2()),
@@ -16,37 +87,28 @@ class PlayerDashboardPage extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
+                  const Text(
                     "Player Dashboard",
                     style: TextStyle(
-                      fontSize: 40, // Slightly smaller than login page
+                      fontSize: 40,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       letterSpacing: 2,
                     ),
                   ),
                   const SizedBox(height: 50),
-                  
-                  // First button - Upload Videos
                   CustomButton(
                     text: "Upload Videos",
                     onPressed: () {
-                      // Navigate to video upload page
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => VideoUploadPage()),
+                        MaterialPageRoute(
+                          builder: (context) => VideoUploadPage(),
+                        ),
                       );
                     },
                   ),
-                  
                   const SizedBox(height: 20),
-                  
-                  // Second button - Manage Players
-
-                  
-                  const SizedBox(height: 20),
-                  
-                  // Optional: Add a sign out button
                   CustomButton(
                     text: "Sign Out",
                     onPressed: () {
@@ -68,8 +130,8 @@ class PlayerDashboardPage extends StatelessWidget {
     return Container(
       width: 260,
       height: 260,
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 254, 255, 227),
+      decoration: const BoxDecoration(
+        color: Color.fromARGB(255, 254, 255, 227),
         shape: BoxShape.circle,
       ),
     );
@@ -79,8 +141,8 @@ class PlayerDashboardPage extends StatelessWidget {
     return Container(
       width: 260,
       height: 260,
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 243, 255, 136),
+      decoration: const BoxDecoration(
+        color: Color.fromARGB(255, 243, 255, 136),
         shape: BoxShape.circle,
       ),
     );

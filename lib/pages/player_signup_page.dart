@@ -39,7 +39,7 @@ class SignUpPageState extends State<UserSignUpPage> {
     print('Password: ${passwordController.text}');
     print('Phone: ${phoneController.text}');
 
-    final url = Uri.parse('http://192.168.1.58:5000/api/users');
+    final url = Uri.parse('http://10.0.2.2:5000/api/users');
 
     final response = await http.post(
       url,
@@ -50,7 +50,7 @@ class SignUpPageState extends State<UserSignUpPage> {
         'email': emailController.text,
         'password': passwordController.text,
         'phone': phoneController.text,
-        'role': widget.role,
+        'role': 'player',
       }),
     );
 

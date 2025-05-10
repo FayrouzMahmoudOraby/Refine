@@ -66,7 +66,6 @@ class SelectionPage extends StatelessWidget {
 
                 // Coach Button
 
-
                 // **New Chatbot Button**
               ],
             ),
@@ -85,7 +84,7 @@ class SelectionPage extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => UserSignUpPage(role: 'player'),
+              builder: (context) => UserSignUpPage(role: 'Sign up'),
             ),
           );
         }
