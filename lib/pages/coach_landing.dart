@@ -3,11 +3,12 @@ import '../widgets/custom_button.dart';
 import '../pages/video_upload_page.dart';
 import '../pages/CoachPlayerPage.dart';
 import '../pages/assigned_to_trainees.dart';
+import '../pages/AddTrainingPage.dart';
+import '../pages/profile_page.dart';
 import '../widgets/custom_sidebar_drawer.dart'; // import your reusable drawer
 import '../pages/signin_page.dart';
 import '../pages/auth_service.dart';
 import '../pages/welcome_page.dart';
-import '../pages/profile_page.dart';
 
 class CoachDashboardPage extends StatelessWidget {
   @override
@@ -58,9 +59,17 @@ class CoachDashboardPage extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => AssignedToTraineesPage(),
-                ),
+                MaterialPageRoute(builder: (context) => AssignTrainingPage()),
+              );
+            },
+          ),
+          SidebarItem(
+            title: 'Add Training',
+            icon: Icons.group,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddTrainingPage()),
               );
             },
           ),

@@ -3,29 +3,30 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 
-class AssignedToTraineesPage extends StatefulWidget {
+class AssignTrainingPage extends StatefulWidget {
   @override
-  _AssignedToTraineesPageState createState() => _AssignedToTraineesPageState();
+  _AssignTrainingPageState createState() => _AssignTrainingPageState();
 }
 
-class _AssignedToTraineesPageState extends State<AssignedToTraineesPage> {
+class _AssignTrainingPageState extends State<AssignTrainingPage> {
   DateTime? _selectedDate;
-  TextEditingController _trainingController = TextEditingController();
-  TextEditingController _durationController = TextEditingController();
-
   List<dynamic> _players = [];
+  List<dynamic> _trainings = [];
+
   String? _selectedPlayerId;
+  String? _selectedTrainingId;
 
   @override
   void initState() {
     super.initState();
     fetchPlayers();
+    fetchTrainings();
   }
 
   Future<void> fetchPlayers() async {
     final response = await http.get(
       Uri.parse('http://10.0.2.2:5000/api/users/players'),
-    ); // Adjust URL for your IP if needed
+    );
 
     if (response.statusCode == 200) {
       setState(() {
@@ -36,67 +37,71 @@ class _AssignedToTraineesPageState extends State<AssignedToTraineesPage> {
     }
   }
 
+  Future<void> fetchTrainings() async {
+    final response = await http.get(
+      Uri.parse('http://10.0.2.2:5000/api/trainings'),
+    );
+
+    if (response.statusCode == 200) {
+      setState(() {
+        _trainings = json.decode(response.body);
+      });
+    } else {
+      print('Failed to load trainings');
+    }
+  }
+
   Future<void> _pickDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now().add(Duration(days: 1)),
-      firstDate: DateTime.now().add(Duration(days: 1)),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2100),
     );
 
-    if (picked != null && picked != _selectedDate) {
+    if (picked != null) {
       setState(() {
         _selectedDate = picked;
       });
     }
   }
 
-  Future<void> _submitTraining() async {
+  Future<void> _assignTraining() async {
     if (_selectedPlayerId == null ||
-        _selectedDate == null ||
-        _trainingController.text.isEmpty ||
-        _durationController.text.isEmpty) {
+        _selectedTrainingId == null ||
+        _selectedDate == null) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text("Please fill all fields.")));
+      ).showSnackBar(SnackBar(content: Text("Please select all fields.")));
       return;
     }
 
     final body = {
       "playerId": _selectedPlayerId,
-      "title": _trainingController.text,
+      "trainingId": _selectedTrainingId,
       "date": _selectedDate!.toIso8601String(),
-      "duration": _durationController.text,
     };
 
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:5000/api/trainings'),
+      Uri.parse('http://10.0.2.2:5000/api/trainings/assign'),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(body),
     );
 
     if (response.statusCode == 201) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Training Assigned Successfully!")),
+        SnackBar(content: Text("Training assigned successfully!")),
       );
-      _trainingController.clear();
-      _durationController.clear();
       setState(() {
         _selectedDate = null;
         _selectedPlayerId = null;
+        _selectedTrainingId = null;
       });
     } else {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text("Error assigning training.")));
     }
-  }
-
-  @override
-  void dispose() {
-    _trainingController.dispose();
-    _durationController.dispose();
-    super.dispose();
   }
 
   @override
@@ -108,7 +113,7 @@ class _AssignedToTraineesPageState extends State<AssignedToTraineesPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Assign Training to Trainee'),
+        title: Text('Assign Training to Player'),
         backgroundColor: Color(0xFF005BBB),
       ),
       body: SingleChildScrollView(
@@ -117,14 +122,14 @@ class _AssignedToTraineesPageState extends State<AssignedToTraineesPage> {
           children: [
             DropdownButtonFormField<String>(
               decoration: InputDecoration(
-                labelText: 'Select Trainee',
+                labelText: 'Select Player',
                 border: OutlineInputBorder(),
               ),
               items:
                   _players.map((player) {
                     return DropdownMenuItem<String>(
                       value: player['_id'],
-                      child: Text(player['name'] ?? 'Unnamed'),
+                      child: Text(player['name']),
                     );
                   }).toList(),
               onChanged: (value) {
@@ -135,6 +140,26 @@ class _AssignedToTraineesPageState extends State<AssignedToTraineesPage> {
               value: _selectedPlayerId,
             ),
             SizedBox(height: 20),
+            DropdownButtonFormField<String>(
+              decoration: InputDecoration(
+                labelText: 'Select Training',
+                border: OutlineInputBorder(),
+              ),
+              items:
+                  _trainings.map((training) {
+                    return DropdownMenuItem<String>(
+                      value: training['_id'],
+                      child: Text(training['title']),
+                    );
+                  }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedTrainingId = value;
+                });
+              },
+              value: _selectedTrainingId,
+            ),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _pickDate(context),
               child: Text('Select Training Date'),
@@ -142,63 +167,19 @@ class _AssignedToTraineesPageState extends State<AssignedToTraineesPage> {
                 backgroundColor: Color(0xFF005BBB),
               ),
             ),
-            SizedBox(height: 20),
-            if (_selectedDate != null)
-              Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              'Selected Date: ',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            Text(
-                              formattedDate,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        TextField(
-                          controller: _trainingController,
-                          decoration: InputDecoration(
-                            labelText: 'Training Title',
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        TextField(
-                          controller: _durationController,
-                          decoration: InputDecoration(
-                            labelText: 'Duration (e.g. 1 hour)',
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _submitTraining,
-                    child: Text('Submit'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                    ),
-                  ),
-                ],
+            if (_selectedDate != null) ...[
+              SizedBox(height: 10),
+              Text(
+                'Selected Date: $formattedDate',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _assignTraining,
+                child: Text('Assign Training'),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+              ),
+            ],
           ],
         ),
       ),
