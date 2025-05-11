@@ -1,22 +1,29 @@
 const mongoose = require('mongoose');
 
 const trainingSchema = new mongoose.Schema({
-  playerId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+  email: {
+    type: String,
     required: true,
+    trim: true,
+    lowercase: true
   },
   title: {
     type: String,
     required: true,
+    trim: true
   },
   date: {
     type: Date,
-    required: true,
+    required: true
   },
   duration: {
-    type: String, // you can also use Number if it's in minutes
+    type: String,
     required: true,
+    trim: true
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 }, { timestamps: true });
 
