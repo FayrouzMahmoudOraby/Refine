@@ -10,6 +10,7 @@ import '../pages/signin_page.dart';
 import '../pages/auth_service.dart';
 import '../pages/welcome_page.dart';
 import '../pages/Attendance_Page.dart';
+import '../pages/subscription_system.dart';
 
 class CoachDashboardPage extends StatelessWidget {
   @override
@@ -80,7 +81,7 @@ class CoachDashboardPage extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CoachPlayerPage()),
+                MaterialPageRoute(builder: (context) => SubscriptionPage()),
               );
             },
           ),

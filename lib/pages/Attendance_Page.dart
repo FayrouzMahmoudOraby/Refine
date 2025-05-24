@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_sidebar_drawer.dart'; // reuse the same drawer
 import '../pages/auth_service.dart';
-import '../pages/signin_page.dart';
+import '../pages/CoachPlayerPage.dart';
 import '../pages/profile_page.dart';
+import '../pages/assigned_to_trainees.dart';
+import '../pages/AddTrainingPage.dart';
+import '../pages/profile_page.dart';
+import '../widgets/custom_sidebar_drawer.dart'; // import your reusable drawer
+import '../pages/signin_page.dart';
+import '../pages/auth_service.dart';
+import '../pages/welcome_page.dart';
+import '../pages/Attendance_Page.dart';
+import '../pages/coach_landing.dart';
 
 class AttendancePage extends StatelessWidget {
   @override
@@ -18,26 +27,64 @@ class AttendancePage extends StatelessWidget {
       drawer: CustomSidebarDrawer(
         userName: 'Coach',
         pageItems: [
-          // Include the same menu items you want, example:
           SidebarItem(
             title: 'Dashboard',
             icon: Icons.dashboard,
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/dashboard');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CoachDashboardPage()),
+              );
             },
           ),
           SidebarItem(
             title: 'Manage Players',
             icon: Icons.group,
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/manage_players');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CoachPlayerPage()),
+              );
             },
           ),
           SidebarItem(
             title: 'Attendance Report',
-            icon: Icons.calendar_today,
+            icon: Icons.group,
             onTap: () {
-              Navigator.pop(context); // Already on Attendance page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AttendancePage()),
+              );
+            },
+          ),
+          SidebarItem(
+            title: 'Assigned to Trainees',
+            icon: Icons.group,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AssignTrainingPage()),
+              );
+            },
+          ),
+          SidebarItem(
+            title: 'Add Training',
+            icon: Icons.group,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddTrainingPage()),
+              );
+            },
+          ),
+          SidebarItem(
+            title: 'Payment History',
+            icon: Icons.group,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CoachPlayerPage()),
+              );
             },
           ),
           SidebarItem(
@@ -45,10 +92,14 @@ class AttendancePage extends StatelessWidget {
             icon: Icons.logout,
             onTap: () async {
               await AuthService().clearSession();
+
+              // 2. Navigate to the welcome/sign-in screen
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => SignInPage()),
-                (route) => false,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                ), // or SignInPage() if you prefer
+                (route) => false, // This removes all routes
               );
             },
           ),
@@ -56,7 +107,10 @@ class AttendancePage extends StatelessWidget {
             title: 'My Profile',
             icon: Icons.person,
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/profile');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage()),
+              );
             },
           ),
         ],
