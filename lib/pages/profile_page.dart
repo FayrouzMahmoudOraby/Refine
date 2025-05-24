@@ -62,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
       }
 
       final response = await http.put(
-        Uri.parse('http://10.0.2.2:5000/api/users/me'),
+        Uri.parse('http://192.168.1.58:5000/api/users/me'),
         headers: {
           'Content-Type': 'application/json',
           'x-auth-token': token ?? '',

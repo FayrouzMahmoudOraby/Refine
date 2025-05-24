@@ -61,7 +61,7 @@ class _AddTrainingPageState extends State<AddTrainingPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:5000/api/trainings'),
+        Uri.parse('http://192.168.1.58:5000/api/trainings'),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           "email": _userEmail,  // Changed from playerId to email

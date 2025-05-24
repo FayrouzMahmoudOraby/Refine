@@ -30,13 +30,6 @@ class AdminDashboardPage extends StatelessWidget {
               );
             },
           ),
-          SidebarItem(
-            title: 'Manage Content',
-            icon: Icons.folder,
-            onTap: () {
-              // Navigate to content management
-            },
-          ),
           // Add this to your pageItems list in each dashboard
           SidebarItem(
             title: 'View Analytics',
@@ -103,13 +96,7 @@ class AdminDashboardPage extends StatelessWidget {
                       );
                     },
                   ),
-                  const SizedBox(height: 20),
-                  CustomButton(
-                    text: "Manage Content",
-                    onPressed: () {
-                      // Navigate to content management
-                    },
-                  ),
+                  
                   const SizedBox(height: 20),
                   CustomButton(
                     text: "View Analytics",

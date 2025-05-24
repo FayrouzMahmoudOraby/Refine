@@ -27,7 +27,7 @@ class _SignInPageState extends State<SignInPage> {
     }
 
 
-    final url = Uri.parse('http://10.0.2.2:5000/api/users/login');
+    final url = Uri.parse('http://192.168.1.58:5000/api/users/login');
 
 
     try {
@@ -228,14 +228,21 @@ class CustomFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 90, vertical: 4),
       child: TextField(
         controller: controller,
         obscureText: isPassword,
         decoration: InputDecoration(
           labelText: label,
-          border: OutlineInputBorder(),
+          labelStyle: TextStyle(color: Colors.white),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white, width: 5),
+          ),
         ),
+        style: TextStyle(color: Colors.white),
       ),
     );
   }

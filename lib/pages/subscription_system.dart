@@ -114,9 +114,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                       ? ListView(
                         children: [
                           PackageCard(
-                            title: "Daily",
+                            title: "Athlete Plan",
                             headerColor: const Color(0xFF261FB3),
-                            price: "\$4.99",
+                            price: "\$20",
                             descriptionLine1: "Quick access for one day.",
                             descriptionLine2: "Perfect for short tasks.",
                             buttonText: "Choose Daily",
@@ -128,9 +128,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                             onButtonPressed: () {},
                           ),
                           PackageCard(
-                            title: "Monthly",
+                            title: "Coach Plan",
                             headerColor: const Color(0xFF0118D8),
-                            price: "\$14.99",
+                            price: "\$49",
                             descriptionLine1: "Unlimited access for 30 days.",
                             descriptionLine2: "For ongoing work needs.",
                             buttonText: "Choose Monthly",
@@ -142,9 +142,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                             onButtonPressed: () {},
                           ),
                           PackageCard(
-                            title: "Yearly",
+                            title: "Club Plan",
                             headerColor: const Color(0xFF1B56FD),
-                            price: "\$99.99",
+                            price: "\$122",
                             descriptionLine1: "Best value for long term use.",
                             descriptionLine2: "Save over 40% annually.",
                             buttonText: "Choose Yearly",

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../pages/player_signup_page.dart';
+import '../pages/signin_page.dart';
+import '../widgets/custom_sidebar_drawer.dart';
 
 class SelectionPage extends StatelessWidget {
   const SelectionPage({super.key});
@@ -7,38 +9,74 @@ class SelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          // Background Image
-          Image.asset(
-            'assets/sbackground.jpg', // Ensure this file exists
-            fit: BoxFit.cover,
-          ),
-
-          // Go Back Button (Top-Right)
-          Positioned(
-            top: 40,
-            right: 20,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: Builder(
+          builder: (BuildContext scaffoldContext) {
+            return IconButton(
+              icon: const Icon(Icons.menu, color: Color.fromARGB(255, 0, 0, 0)),
+              onPressed: () => Scaffold.of(scaffoldContext).openDrawer(),
+            );
+          },
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
             child: ElevatedButton.icon(
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              onPressed: () => Navigator.pop(context),
               icon: const Icon(Icons.arrow_back, color: Colors.white),
               label: const Text(
                 "Go Back",
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Color.fromARGB(255, 255, 255, 255),
                   fontWeight: FontWeight.bold,
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white.withOpacity(0.5),
+                backgroundColor: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
             ),
+          ),
+        ],
+      ),
+      drawer: CustomSidebarDrawer(
+        userName: 'Guest',
+        pageItems: [
+          SidebarItem(
+            title: 'Login',
+            icon: Icons.login,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SignInPage()),
+              );
+            },
+          ),
+          SidebarItem(
+            title: 'Sign Up',
+            icon: Icons.person_add,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UserSignUpPage(role: 'Sign up'),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          // Background Image
+          Image.asset(
+            'assets/sbackground.jpg',
+            fit: BoxFit.cover,
           ),
 
           // Centered Content
@@ -47,7 +85,7 @@ class SelectionPage extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 // Title "Refine"
-                Text(
+                const Text(
                   "Refine",
                   style: TextStyle(
                     fontSize: 40,
@@ -60,13 +98,9 @@ class SelectionPage extends StatelessWidget {
                 const SizedBox(height: 40),
 
                 // Player Button
-                customButton(context, "Player"),
+                _customButton(context, "Player"),
 
                 const SizedBox(height: 20),
-
-                // Coach Button
-
-                // **New Chatbot Button**
               ],
             ),
           ),
@@ -75,11 +109,9 @@ class SelectionPage extends StatelessWidget {
     );
   }
 
-  // Custom Button Function
-  Widget customButton(BuildContext context, String text) {
+  Widget _customButton(BuildContext context, String text) {
     return ElevatedButton(
       onPressed: () {
-        // Navigation logic for Player and Coach
         if (text == "Player") {
           Navigator.push(
             context,
