@@ -27,7 +27,7 @@ class _SignInPageState extends State<SignInPage> {
     }
 
 
-    final url = Uri.parse('http://192.168.3.24:5000/api/users/login');
+    final url = Uri.parse('http://10.0.2.2:5000/api/users/login');
 
 
     try {

@@ -27,7 +27,7 @@ class _UserManagementPageState extends State<UserManagementPage> {
   Future<void> fetchUsers() async {
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.3.24:5000/api/admin/users'),
+        Uri.parse('http://10.0.2.2:5000/api/admin/users'),
       );
 
       if (response.statusCode == 200) {
@@ -52,7 +52,7 @@ class _UserManagementPageState extends State<UserManagementPage> {
   Future<void> _addUser() async {
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.3.24:5000/api/users'),
+        Uri.parse('http://10.0.2.2:5000/api/users'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'name': _nameController.text,
@@ -81,7 +81,7 @@ class _UserManagementPageState extends State<UserManagementPage> {
   Future<void> _deleteUser(String userId) async {
     try {
       final response = await http.delete(
-        Uri.parse('http://192.168.3.24:5000/api/admin/users/$userId'),
+        Uri.parse('http://10.0.2.2:5000/api/admin/users/$userId'),
       );
 
       if (response.statusCode == 200) {

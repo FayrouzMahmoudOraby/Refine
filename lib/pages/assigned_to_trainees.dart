@@ -25,7 +25,7 @@ class _AssignTrainingPageState extends State<AssignTrainingPage> {
 
   Future<void> fetchPlayers() async {
     final response = await http.get(
-      Uri.parse('http://192.168.3.24:5000/api/users/players'),
+      Uri.parse('http://10.0.2.2:5000/api/users/players'),
     );
 
     if (response.statusCode == 200) {
@@ -39,7 +39,7 @@ class _AssignTrainingPageState extends State<AssignTrainingPage> {
 
   Future<void> fetchTrainings() async {
     final response = await http.get(
-      Uri.parse('http://192.168.3.24:5000/api/trainings'),
+      Uri.parse('http://10.0.2.2:5000/api/trainings'),
     );
 
     if (response.statusCode == 200) {
@@ -83,7 +83,7 @@ class _AssignTrainingPageState extends State<AssignTrainingPage> {
     };
 
     final response = await http.post(
-      Uri.parse('http://192.168.3.24:5000/api/trainings/assign'),
+      Uri.parse('http://10.0.2.2:5000/api/trainings/assign'),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(body),
     );
