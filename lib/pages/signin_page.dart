@@ -26,58 +26,56 @@ class _SignInPageState extends State<SignInPage> {
       return;
     }
 
-
     final url = Uri.parse('http://192.168.1.58:5000/api/users/login');
 
-
     try {
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': email, 'password': password}),
-    );
-
-    final data = jsonDecode(response.body);
-
-// In your SignInPage (_loginUser method)
-    if (response.statusCode == 200 && data['success'] == true) {
-      // Save user session
-      await AuthService().saveUserSession(
-        data['token'], // Make sure your backend returns a token
-        jsonEncode(data['user']), // Save user data as string
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'password': password}),
       );
-      
-      // Role-based navigation
-      switch (data['user']['role']) {
-        case 'admin':
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => AdminDashboardPage()),
-          );
-          break;
-        case 'coach':
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => CoachDashboardPage()),
-          );
-          break;
-        case 'player':
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => PlayerDashboardPage()),
-          );
-          break;
-        default:
-          setState(() => errorMessage = 'Unknown user role');
-      }
 
-    } else {
-      setState(() => errorMessage = data['message'] ?? 'Login failed');
+      final data = jsonDecode(response.body);
+
+      // In your SignInPage (_loginUser method)
+      if (response.statusCode == 200 && data['success'] == true) {
+        // Save user session
+        await AuthService().saveUserSession(
+          data['token'], // Make sure your backend returns a token
+          jsonEncode(data['user']), // Save user data as string
+        );
+
+        // Role-based navigation
+        switch (data['user']['role']) {
+          case 'admin':
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => AdminDashboardPage()),
+            );
+            break;
+          case 'coach':
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => CoachDashboardPage()),
+            );
+            break;
+          case 'player':
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => PlayerDashboardPage()),
+            );
+            break;
+          default:
+            setState(() => errorMessage = 'Unknown user role');
+        }
+      } else {
+        setState(() => errorMessage = data['message'] ?? 'Login failed');
+      }
+    } catch (e) {
+      setState(() => errorMessage = 'Something went wrong. Please try again.');
     }
-  } catch (e) {
-    setState(() => errorMessage = 'Something went wrong. Please try again.');
   }
-}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

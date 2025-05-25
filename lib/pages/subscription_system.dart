@@ -13,7 +13,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
 
   @override
   Widget build(BuildContext context) {
-    final backgroundColor = const Color(0xFF0C0950); // Dark futuristic blue
+    final backgroundColor = const Color(0xFF0C0950);
     final accentColor = Colors.deepPurpleAccent;
 
     return Scaffold(
